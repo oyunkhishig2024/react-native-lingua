@@ -1,3 +1,4 @@
+import { Link } from "expo-router";
 import { Text, View } from "react-native";
 
 export default function Index() {
@@ -7,6 +8,12 @@ export default function Index() {
         Course coming soon!
       </Text>
       <Text>The link to join the waitlist is down.</Text>
+      <Link
+        href="/onboarding"
+        className="h4 mt-6 text-lingua-deep-purple underline"
+      >
+        Open onboarding
+      </Link>
     </View>
   );
 }
