@@ -18,6 +18,8 @@ import { Image } from "@/components/Image";
 import { VerificationModal } from "@/components/VerificationModal";
 import { images } from "@/constants/images";
 import { showAuthError, showAuthMessage } from "@/lib/clerk";
+import { posthog } from "@/lib/posthog";
+import { posthogLog } from "@/lib/posthog-log";
 import { colors, fontFamily } from "@/theme";
 
 // Clerk checks this too: keep its "minimum length" setting at the same number
@@ -107,6 +109,8 @@ export function AuthScreen({ mode }: AuthScreenProps) {
     if (error) {
       showAuthError(step, error);
     } else {
+      posthog?.capture("auth_code_requested", { auth_flow: mode });
+      posthogLog.info("authentication_code_requested", { auth_flow: mode });
       setIsVerifying(true);
     }
   };
@@ -132,8 +136,12 @@ export function AuthScreen({ mode }: AuthScreenProps) {
 
     // Activates the session; the root layout then shows the home route
     const { error: finalizeError } = await attempt.finalize();
-    if (finalizeError) showAuthError("start session", finalizeError);
+    if (finalizeError) {
+      showAuthError("start session", finalizeError);
+      return false;
+    }
 
+    posthog?.capture("auth_completed", { auth_flow: mode });
     return true;
   };
 
@@ -147,6 +155,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
 
       if (createdSessionId && setActive) {
         await setActive({ session: createdSessionId });
+        posthog?.capture("sso_auth_completed", { auth_provider: strategy });
       } else if (authSessionResult?.type === "success") {
         // Not a cancel: Clerk still needs something before signing in
         showAuthMessage(
