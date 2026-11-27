@@ -1,13 +1,17 @@
 import { useClerk } from "@clerk/expo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Image } from "expo-image";
 import { router } from "expo-router";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
+import { getLanguageById } from "@/data/languages";
 import { useLanguageStore } from "@/store/languageStore";
 
 export default function Index() {
   const { signOut } = useClerk();
+  const selectedId = useLanguageStore((state) => state.selectedLanguageId);
   const resetLanguage = useLanguageStore((state) => state.resetLanguage);
+  const language = selectedId ? getLanguageById(selectedId) : undefined;
 
   // For testing: with no saved language, the app returns to language selection
   const clearStorage = async () => {
@@ -18,6 +22,19 @@ export default function Index() {
   return (
     <View className="flex-1 items-center justify-center bg-background">
       <Text className="h2 text-lingua-purple">Lingua</Text>
+      {language && (
+        <View className="mt-3 flex-row items-center gap-3">
+          <View className="language__flag">
+            <Image
+              source={language.flagUrl}
+              style={styles.flag}
+              // China's stars sit on the left edge, so don't crop that side
+              contentPosition={language.id === "zh" ? "left" : "center"}
+            />
+          </View>
+          <Text className="language__name">Learning {language.name}</Text>
+        </View>
+      )}
       <Pressable
         accessibilityRole="button"
         onPress={() => router.push("/language-selection")}
@@ -48,3 +65,7 @@ export default function Index() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  flag: { width: "100%", height: "100%" },
+});
