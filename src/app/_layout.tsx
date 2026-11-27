@@ -52,12 +52,12 @@ function RootNavigator() {
   // Expo Router moves the user automatically when a guard changes
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      {/* Home needs a signed-in user who has picked a language */}
+      {/* The tabs need a signed-in user who has picked a language */}
       <Stack.Protected
         guard={isSignedIn && hasLanguage}
         redirectTo={isSignedIn ? "/language-selection" : "/onboarding"}
       >
-        <Stack.Screen name="index" />
+        <Stack.Screen name="(tabs)" />
       </Stack.Protected>
 
       <Stack.Protected guard={isSignedIn} redirectTo="/onboarding">

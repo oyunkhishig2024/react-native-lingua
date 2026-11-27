@@ -274,3 +274,23 @@
   border-radius: 13px;
   background-color: var(--color-lingua-deep-purple);
 }
+
+/* Bottom tab bar (BEM) */
+@utility tab-bar {
+  flex-direction: row;
+  height: 74px;
+}
+
+@utility tab-bar__item {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+@utility tab-bar__label {
+  font-family: var(--font-montserrat-medium);
+  font-size: 11px;
+  line-height: 14px;
+  color: #69708f;
+}

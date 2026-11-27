@@ -8,6 +8,12 @@ import facebook from "@/assets/images/icons/facebook.svg";
 import google from "@/assets/images/icons/google.svg";
 import search from "@/assets/images/icons/search.svg";
 import sparkle from "@/assets/images/icons/sparkle.svg";
+import tabAiTeacher from "@/assets/images/icons/tab-ai-teacher.svg";
+import tabChat from "@/assets/images/icons/tab-chat.svg";
+import tabHomeFilled from "@/assets/images/icons/tab-home-filled.svg";
+import tabHome from "@/assets/images/icons/tab-home.svg";
+import tabLearn from "@/assets/images/icons/tab-learn.svg";
+import tabProfile from "@/assets/images/icons/tab-profile.svg";
 import earth from "@/assets/images/earth.png";
 import mascotAuth from "@/assets/images/mascot-auth.png";
 import mascot from "@/assets/images/mascot-welcome.png";
@@ -29,4 +35,10 @@ export const images = {
   google,
   search,
   sparkle,
+  tabAiTeacher,
+  tabChat,
+  tabHomeFilled,
+  tabHome,
+  tabLearn,
+  tabProfile,
 };
