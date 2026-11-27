@@ -25,8 +25,8 @@
   --color-background: #ffffff;
 
   /* Fonts: React Native needs one font family per weight (names = font file PostScript names) */
-  --font-poppins: "Poppins-Regular";
-  --font-poppins-medium: "Poppins-Medium";
-  --font-poppins-semibold: "Poppins-SemiBold";
-  --font-poppins-bold: "Poppins-Bold";
+  --font-montserrat: "Montserrat-Regular";
+  --font-montserrat-medium: "Montserrat-Medium";
+  --font-montserrat-semibold: "Montserrat-SemiBold";
+  --font-montserrat-bold: "Montserrat-Bold";
 }

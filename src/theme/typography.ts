@@ -3,10 +3,10 @@
 // Keep in sync with the typography utilities in `global.css`.
 
 export const fontFamily = {
-  regular: "Poppins-Regular",
-  medium: "Poppins-Medium",
-  semibold: "Poppins-SemiBold",
-  bold: "Poppins-Bold",
+  regular: "Montserrat-Regular",
+  medium: "Montserrat-Medium",
+  semibold: "Montserrat-SemiBold",
+  bold: "Montserrat-Bold",
 } as const;
 
 export const typography = {

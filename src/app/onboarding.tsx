@@ -6,20 +6,21 @@ import { images } from "@/constants/images";
 export default function Onboarding() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
-      <View className="flex-1 px-7 pb-6">
+      <View className="w-full max-w-[480px] flex-1 self-center px-7 pb-6">
         {/* Logo + app name */}
         <View className="flex-row items-center justify-center gap-2 pt-2">
           <Image
             source={images.mascotLogo}
-            className="h-16 w-16"
+            // `!` lets the size win over the image's natural size on web
+            className="h-16! w-16!"
             resizeMode="contain"
           />
-          <Text className="onboarding__brand">Onki-lingua</Text>
+          <Text className="onboarding__brand">lingua</Text>
         </View>
 
         {/* Headline */}
         <View className="mt-8 px-3">
-          <Text className="onboarding__title">Миний гадаад хэлний</Text>
+          <Text className="onboarding__title">Миний</Text>
           <Text className="onboarding__title">
             <Text className="text-lingua-deep-purple">шифү багш</Text>.
           </Text>
@@ -33,7 +34,7 @@ export default function Onboarding() {
           <View className="h-80 w-full max-w-[360px]">
             <Image
               source={images.mascot}
-              className="h-full w-full"
+              className="h-full! w-full!"
               resizeMode="contain"
             />
 
@@ -69,7 +70,7 @@ export default function Onboarding() {
 
         {/* Get Started */}
         <Pressable className="onboarding__button">
-          <Text className="onboarding__button-text">Шууд шаая, эхлүүл</Text>
+          <Text className="onboarding__button-text">Get started</Text>
           <Text className="onboarding__button-chevron">›</Text>
         </Pressable>
       </View>
