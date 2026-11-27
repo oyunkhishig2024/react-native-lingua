@@ -1,6 +1,132 @@
 {
   "version": 1,
   "skills": {
+    "clerk": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk/SKILL.md",
+      "computedHash": "e2f745d8bc9a6f2ca8a063c4699846e1eebaaf8e6d104f95b1b1aa70d7f6c204"
+    },
+    "clerk-android": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-android/SKILL.md",
+      "computedHash": "e3708cb848348b37e5e3ca209b64a3d026a6b87f5d21367ba4659f8982af5337"
+    },
+    "clerk-astro-patterns": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-astro-patterns/SKILL.md",
+      "computedHash": "759c0b4f283c3afc9d0ebb63a2c781e7783c76670001e92c408ad94d5268331c"
+    },
+    "clerk-backend-api": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-backend-api/SKILL.md",
+      "computedHash": "eccd4c2f0a999013bcd8ccefbbace142462559b1f6b15412adba2edff3c097cc"
+    },
+    "clerk-billing": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-billing/SKILL.md",
+      "computedHash": "5b67127cb7a080258c2ad361783e38230d1fc8542fb71a954d5c7c7ccdd7819e"
+    },
+    "clerk-chrome-extension-patterns": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-chrome-extension-patterns/SKILL.md",
+      "computedHash": "db662dfc28f4ea9531bcb81d70994d93122c13918cb639ce84b64971fe5885ee"
+    },
+    "clerk-cli": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-cli/SKILL.md",
+      "computedHash": "232a7c68e24af082e397e6fcf7606e32d297e98c1eb85fbebb5c4720d5183d76"
+    },
+    "clerk-custom-ui": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-custom-ui/SKILL.md",
+      "computedHash": "1f9557f47a7b0ba8e8929d0d185ace24beab1e7a982da0f656b398ff8de68c33"
+    },
+    "clerk-expo": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-expo/SKILL.md",
+      "computedHash": "b9b21d789cce752ec82c8dc09e4b8bd0c6c30ea6aa8bbac0ad438e6b49d485b4"
+    },
+    "clerk-migrate": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-migrate/SKILL.md",
+      "computedHash": "56409ef3838d5b3df2d19270fd108d6142d9808d1e2f0c5955ac4d8920ce860f"
+    },
+    "clerk-nextjs-patterns": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-nextjs-patterns/SKILL.md",
+      "computedHash": "009fa620bdadba4d221fdd0a6e6c963f14c67fb5bd8b4008ccb1a96471655ef5"
+    },
+    "clerk-nuxt-patterns": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-nuxt-patterns/SKILL.md",
+      "computedHash": "f3d5f1ef8ccbee32ddac5ab4680ee84d4c3053d8e842c4e6296190058be2364f"
+    },
+    "clerk-orgs": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-orgs/SKILL.md",
+      "computedHash": "1cc0edfbe47dbe9286ab21f19fbdb8fe7326ee2b0d2525818cf39a0448cc589b"
+    },
+    "clerk-react-patterns": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-react-patterns/SKILL.md",
+      "computedHash": "f269e91bbb162a0cb28fa3c10100bc4d760b64dfadbae54df4e8d1a492ce84d1"
+    },
+    "clerk-react-router-patterns": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-react-router-patterns/SKILL.md",
+      "computedHash": "506271aa2405de3b932a35d591bc62ad8ff9f3e71aac3361df6d27f4b6ad6fc2"
+    },
+    "clerk-setup": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-setup/SKILL.md",
+      "computedHash": "e227872a59b99b2ff49b610ec14b2d4060dbdeda5e95289c0f36d4f6c4540d3d"
+    },
+    "clerk-swift": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-swift/SKILL.md",
+      "computedHash": "4144bc448d1b97df4f06949baebda5f00bfd0481a026950706b0e574a9b40f2d"
+    },
+    "clerk-tanstack-patterns": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-tanstack-patterns/SKILL.md",
+      "computedHash": "e5f00fb82256ff0288510b39abf569fae21d2c88196508f649935757d03444d9"
+    },
+    "clerk-testing": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-testing/SKILL.md",
+      "computedHash": "c03e530566bb7c11cc1aab27e3f66961e8daef9a01c6c00b80b1fbe34cf344d6"
+    },
+    "clerk-vue-patterns": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-vue-patterns/SKILL.md",
+      "computedHash": "589173babe1e9115db9e0216593380b8ba8e56dbf7c998d9598f52eb6b01dc2d"
+    },
+    "clerk-webhooks": {
+      "source": "clerk/skills",
+      "sourceType": "github",
+      "skillPath": "skills/clerk-webhooks/SKILL.md",
+      "computedHash": "358d0b1897177a2ebeea8802136eb45e15c5241b7a67d44fc4a0e29bfeb56ac6"
+    },
     "eas-app-stores": {
       "source": "expo/skills",
       "sourceType": "github",

@@ -1,3 +1,4 @@
+import { useSignIn, useSignUp, useSSO } from "@clerk/expo";
 import { Image } from "expo-image";
 import { Link, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -16,6 +17,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { VerificationModal } from "@/components/VerificationModal";
 import { images } from "@/constants/images";
+import { showAuthError, showAuthMessage } from "@/lib/clerk";
 import { colors, fontFamily } from "@/theme";
 
 const content = {
@@ -38,22 +40,29 @@ const content = {
 } as const;
 
 const socialProviders = [
-  { name: "Google", icon: images.google },
-  { name: "Facebook", icon: images.facebook },
-  { name: "Apple", icon: images.apple },
-];
+  { name: "Google", icon: images.google, strategy: "oauth_google" },
+  { name: "Facebook", icon: images.facebook, strategy: "oauth_facebook" },
+  { name: "Apple", icon: images.apple, strategy: "oauth_apple" },
+] as const;
+
+type SocialStrategy = (typeof socialProviders)[number]["strategy"];
 
 type AuthScreenProps = {
   mode: keyof typeof content;
 };
 
-// UI only: authentication is not connected yet.
+// Sign up uses email + password, sign in uses email only.
+// Both are confirmed with a code that Clerk emails to the user.
 export function AuthScreen({ mode }: AuthScreenProps) {
   const copy = content[mode];
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [isBusy, setIsBusy] = useState(false);
+  const { signIn } = useSignIn();
+  const { signUp } = useSignUp();
+  const { startSSOFlow } = useSSO();
 
   const goBack = () => {
     if (router.canGoBack()) {
@@ -63,9 +72,87 @@ export function AuthScreen({ mode }: AuthScreenProps) {
     }
   };
 
-  const finishVerification = () => {
+  const sendSignUpCode = async (emailAddress: string) => {
+    const result = await signUp.password({ emailAddress, password });
+    if (result.error) return { ...result, step: "create sign-up" };
+
+    const sent = await signUp.verifications.sendEmailCode();
+    return { ...sent, step: "send sign-up code" };
+  };
+
+  const submit = async () => {
+    const emailAddress = email.trim();
+
+    if (isBusy) return;
+    if (!emailAddress) return showAuthMessage("Enter your email address.");
+    if (mode === "sign-up" && !password) {
+      return showAuthMessage("Enter a password.");
+    }
+
+    setIsBusy(true);
+    const { error, step } =
+      mode === "sign-up"
+        ? await sendSignUpCode(emailAddress)
+        : {
+            ...(await signIn.emailCode.sendCode({ emailAddress })),
+            step: "send sign-in code",
+          };
+    setIsBusy(false);
+
+    if (error) {
+      showAuthError(step, error);
+    } else {
+      setIsVerifying(true);
+    }
+  };
+
+  const verifyCode = async (code: string) => {
+    const attempt = mode === "sign-up" ? signUp : signIn;
+    const { error } =
+      mode === "sign-up"
+        ? await signUp.verifications.verifyEmailCode({ code })
+        : await signIn.emailCode.verifyCode({ code });
+
+    if (error) {
+      showAuthError("verify code", error);
+      return false;
+    }
+
+    if (attempt.status !== "complete") {
+      showAuthMessage("Your account needs another step we don't support yet.");
+      return false;
+    }
+
     setIsVerifying(false);
-    router.dismissTo("/");
+
+    // Activates the session; the root layout then shows the home route
+    const { error: finalizeError } = await attempt.finalize();
+    if (finalizeError) showAuthError("start session", finalizeError);
+
+    return true;
+  };
+
+  const continueWith = async (strategy: SocialStrategy) => {
+    if (isBusy) return;
+    setIsBusy(true);
+
+    try {
+      const { createdSessionId, setActive, authSessionResult } =
+        await startSSOFlow({ strategy });
+
+      if (createdSessionId && setActive) {
+        await setActive({ session: createdSessionId });
+      } else if (authSessionResult?.type === "success") {
+        // Not a cancel: Clerk still needs something before signing in
+        showAuthMessage(
+          "Your account needs another step we don't support yet.",
+        );
+      }
+    } catch (error) {
+      showAuthError(strategy, error);
+    } finally {
+      setIsBusy(false);
+    }
   };
 
   return (
@@ -172,7 +259,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
 
             <Pressable
               accessibilityRole="button"
-              onPress={() => setIsVerifying(true)}
+              onPress={submit}
               className="auth__button mt-4"
               style={styles.gradient}
             >
@@ -191,6 +278,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
                 <Pressable
                   key={provider.name}
                   accessibilityRole="button"
+                  onPress={() => continueWith(provider.strategy)}
                   className="auth__social"
                 >
                   <Image source={provider.icon} style={styles.icon} />
@@ -200,6 +288,9 @@ export function AuthScreen({ mode }: AuthScreenProps) {
                 </Pressable>
               ))}
             </View>
+
+            {/* Clerk's bot protection mounts here on web */}
+            <View nativeID="clerk-captcha" />
 
             {/* Switch between sign up and sign in */}
             <View className="mt-auto flex-row flex-wrap items-center justify-center gap-1 pt-5">
@@ -217,7 +308,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
         <VerificationModal
           email={email.trim()}
           onClose={() => setIsVerifying(false)}
-          onComplete={finishVerification}
+          onComplete={verifyCode}
         />
       )}
     </SafeAreaView>
