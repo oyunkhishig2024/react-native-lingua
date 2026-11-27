@@ -7,6 +7,7 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 
+import { useLanguageStore } from "@/store/languageStore";
 import { fontAssets } from "@/theme";
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY ?? "";
@@ -17,7 +18,7 @@ if (!publishableKey) {
   );
 }
 
-// Keep the splash screen visible until the fonts and the session are ready
+// Keep the splash screen visible until fonts, session and saved data are ready
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -31,7 +32,12 @@ export default function RootLayout() {
 function RootNavigator() {
   const { isLoaded, isSignedIn = false } = useAuth();
   const [fontsLoaded, fontError] = useFonts(fontAssets);
-  const isReady = isLoaded && (fontsLoaded || fontError !== null);
+  const hasHydrated = useLanguageStore((state) => state.hasHydrated);
+  const hasLanguage = useLanguageStore(
+    (state) => state.selectedLanguageId !== null,
+  );
+  const isReady =
+    isLoaded && hasHydrated && (fontsLoaded || fontError !== null);
 
   useEffect(() => {
     if (isReady) {
@@ -43,11 +49,18 @@ function RootNavigator() {
     return null;
   }
 
-  // Expo Router moves the user automatically when `isSignedIn` changes
+  // Expo Router moves the user automatically when a guard changes
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Protected guard={isSignedIn} redirectTo="/onboarding">
+      {/* Home needs a signed-in user who has picked a language */}
+      <Stack.Protected
+        guard={isSignedIn && hasLanguage}
+        redirectTo={isSignedIn ? "/language-selection" : "/onboarding"}
+      >
         <Stack.Screen name="index" />
+      </Stack.Protected>
+
+      <Stack.Protected guard={isSignedIn} redirectTo="/onboarding">
         <Stack.Screen name="language-selection" />
       </Stack.Protected>
 

@@ -16,11 +16,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { LanguageCard } from "@/components/LanguageCard";
 import { images } from "@/constants/images";
 import { languages } from "@/data/languages";
+import { useLanguageStore } from "@/store/languageStore";
 import { colors, fontFamily } from "@/theme";
 import type { LanguageId } from "@/types/learning";
 
 export default function LanguageSelection() {
-  const [selectedId, setSelectedId] = useState<LanguageId>("es");
+  const savedId = useLanguageStore((state) => state.selectedLanguageId);
+  const setLanguage = useLanguageStore((state) => state.setLanguage);
+  // The tapped card is only saved when the user presses Confirm
+  const [selectedId, setSelectedId] = useState<LanguageId>(savedId ?? "es");
   const [query, setQuery] = useState("");
 
   const search = query.trim().toLowerCase();
@@ -36,6 +40,11 @@ export default function LanguageSelection() {
     } else {
       router.replace("/");
     }
+  };
+
+  const confirm = () => {
+    setLanguage(selectedId);
+    goBack();
   };
 
   return (
@@ -97,7 +106,7 @@ export default function LanguageSelection() {
 
             <Pressable
               accessibilityRole="button"
-              onPress={goBack}
+              onPress={confirm}
               className="auth__button mt-[18px]"
             >
               <Text className="auth__button-text">Confirm</Text>
