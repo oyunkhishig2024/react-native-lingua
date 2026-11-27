@@ -76,6 +76,8 @@ export type Lesson = {
   order: number;
   title: string;
   description: string;
+  /** Photo shown when the lesson is selected. */
+  imageUrl: string;
   xpReward: number;
   goals: string[];
   vocabulary: VocabularyItem[];
@@ -83,6 +85,8 @@ export type Lesson = {
   activities: Activity[];
   aiTeacherPrompt: AITeacherPrompt;
 };
+
+export type LessonStatus = "completed" | "in-progress" | "not-started";
 
 /** Mock progress until XP and completed lessons are tracked for real. */
 export type LearningProgress = {

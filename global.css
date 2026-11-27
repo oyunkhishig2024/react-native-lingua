@@ -452,3 +452,336 @@
   border-color: #7c83a3;
   border-radius: 12px;
 }
+
+/* Lesson screen header and artwork (BEM) */
+@utility lesson-hero {
+  height: 280px;
+}
+
+@utility lesson-hero__title {
+  font-family: var(--font-montserrat-semibold);
+  font-size: 18px;
+  line-height: 26px;
+  color: var(--color-text-primary);
+}
+
+@utility lesson-hero__subtitle {
+  margin-top: 6px;
+  font-family: var(--font-montserrat);
+  font-size: 14px;
+  line-height: 20px;
+  color: #4f5878;
+}
+
+@utility lesson-hero__fade--top {
+  height: 92px;
+  background-image: linear-gradient(
+    to bottom,
+    #ffffff 15%,
+    rgba(255, 255, 255, 0)
+  );
+}
+
+@utility lesson-hero__fade--bottom {
+  height: 56px;
+  background-image: linear-gradient(
+    to top,
+    #ffffff,
+    rgba(255, 255, 255, 0)
+  );
+}
+
+/* Lessons / Practice switch (BEM) */
+@utility segmented {
+  flex-direction: row;
+  height: 54px;
+  border-radius: 16px;
+  background-color: #f6f6fb;
+}
+
+@utility segmented__item {
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+}
+
+@utility segmented__item--active {
+  background-color: var(--color-background);
+  box-shadow: 0 2px 8px rgba(13, 19, 43, 0.08);
+}
+
+@utility segmented__label {
+  font-family: var(--font-montserrat-medium);
+  font-size: 15px;
+  line-height: 22px;
+  color: #4f5878;
+}
+
+@utility segmented__label--active {
+  color: var(--color-lingua-deep-purple);
+}
+
+@utility segmented__indicator {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 0;
+  height: 3px;
+  border-radius: 2px;
+  background-color: var(--color-lingua-deep-purple);
+}
+
+/* Lesson card (BEM) */
+@utility lesson-card {
+  flex-direction: row;
+  align-items: center;
+  min-height: 80px;
+  padding-left: 19px;
+  padding-right: 18px;
+  border-width: 1.5px;
+  border-radius: 14px;
+}
+
+@utility lesson-card--idle {
+  border-color: #f0f1f6;
+  background-color: var(--color-background);
+  box-shadow: 0 2px 8px rgba(13, 19, 43, 0.03);
+}
+
+@utility lesson-card--upcoming {
+  min-height: 89px;
+}
+
+@utility lesson-card--selected {
+  min-height: 96px;
+  border-color: #8b7af2;
+  background-color: #f7f6fe;
+}
+
+@utility lesson-card__number {
+  font-family: var(--font-montserrat);
+  font-size: 13px;
+  line-height: 18px;
+  color: #6b7394;
+}
+
+@utility lesson-card__title {
+  font-family: var(--font-montserrat-medium);
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--color-text-primary);
+}
+
+@utility lesson-card__status {
+  font-family: var(--font-montserrat);
+  font-size: 12px;
+  line-height: 18px;
+  color: #6b7394;
+}
+
+/* Turns the number and status purple on the highlighted card */
+@utility lesson-card__text--accent {
+  color: var(--color-lingua-deep-purple);
+}
+
+@utility lesson-card__thumbnail {
+  width: 42px;
+  height: 42px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+/* Audio lesson screen (BEM) */
+@utility audio-lesson__title {
+  font-family: var(--font-montserrat-semibold);
+  font-size: 18px;
+  line-height: 24px;
+  color: var(--color-text-primary);
+}
+
+@utility audio-lesson__status {
+  flex-shrink: 1;
+  font-family: var(--font-montserrat);
+  font-size: 14px;
+  line-height: 20px;
+  color: #5b6480;
+}
+
+@utility audio-lesson__badge {
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-width: 1px;
+  border-color: #eceef3;
+  border-radius: 18px;
+  background-color: var(--color-background);
+}
+
+@utility audio-lesson__badge-text {
+  font-family: var(--font-montserrat-semibold);
+  font-size: 15px;
+  color: var(--color-text-primary);
+}
+
+@utility audio-lesson__stage {
+  overflow: hidden;
+  border-radius: 22px;
+}
+
+/* Greys, then lightens, the room behind the controls and feedback */
+@utility audio-lesson__fade {
+  height: 340px;
+  background-image: linear-gradient(
+    to bottom,
+    rgba(150, 144, 148, 0) 0%,
+    rgba(150, 144, 148, 0.95) 30%,
+    #aeabb1 55%,
+    #f4f4f7 100%
+  );
+}
+
+@utility audio-lesson__pill {
+  max-width: 58%;
+  padding: 6px 12px;
+  border-radius: 14px;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+@utility audio-lesson__pill-text {
+  font-family: var(--font-montserrat-medium);
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--color-text-primary);
+}
+
+@utility audio-lesson__preview {
+  width: 99px;
+  height: 151px;
+  overflow: hidden;
+  border-width: 2px;
+  border-color: #ffffff;
+  border-radius: 16px;
+}
+
+@utility audio-lesson__bubble {
+  flex-direction: row;
+  align-items: center;
+  min-height: 94px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background-color: var(--color-background);
+  box-shadow: 0 6px 16px rgba(13, 19, 43, 0.12);
+}
+
+@utility audio-lesson__bubble-text {
+  font-family: var(--font-montserrat-medium);
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--color-text-primary);
+}
+
+/* Call controls (BEM) */
+@utility call-control {
+  width: 62px;
+  height: 62px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 31px;
+  background-color: var(--color-background);
+}
+
+/* Greyed when the mic or subtitles are switched off */
+@utility call-control--off {
+  background-color: #d5d6e0;
+}
+
+@utility call-control--end {
+  background-color: #ea4e46;
+}
+
+@utility call-control__label {
+  margin-top: 8px;
+  font-family: var(--font-montserrat-medium);
+  font-size: 12px;
+  line-height: 16px;
+  color: #ffffff;
+}
+
+/* Lesson feedback (BEM) */
+@utility feedback-card {
+  flex-direction: row;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  border-radius: 18px;
+  background-color: var(--color-background);
+}
+
+@utility feedback-card__label {
+  font-family: var(--font-montserrat-medium);
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--color-text-primary);
+}
+
+@utility feedback-card__value {
+  margin-top: 12px;
+  font-family: var(--font-montserrat-medium);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+/* Lesson details under the call (BEM) */
+@utility lesson-details {
+  padding: 16px;
+  border-width: 1px;
+  border-color: #f0f1f6;
+  border-radius: 16px;
+  background-color: var(--color-background);
+}
+
+@utility lesson-details__eyebrow {
+  font-family: var(--font-montserrat-semibold);
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-lingua-deep-purple);
+}
+
+@utility lesson-details__title {
+  font-family: var(--font-montserrat-semibold);
+  font-size: 18px;
+  line-height: 26px;
+  color: var(--color-text-primary);
+}
+
+@utility lesson-details__heading {
+  font-family: var(--font-montserrat-semibold);
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--color-text-primary);
+}
+
+@utility lesson-details__phrase {
+  margin-top: 4px;
+  font-family: var(--font-montserrat-medium);
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--color-text-primary);
+}
+
+@utility lesson-details__text {
+  margin-top: 4px;
+  font-family: var(--font-montserrat);
+  font-size: 14px;
+  line-height: 20px;
+  color: #6b7394;
+}
+
+@utility lesson-details__hint {
+  margin-top: 2px;
+  font-family: var(--font-montserrat);
+  font-size: 12px;
+  line-height: 18px;
+  color: #6b7394;
+}
