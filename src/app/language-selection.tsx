@@ -16,6 +16,8 @@ import { Image } from "@/components/Image";
 import { LanguageCard } from "@/components/LanguageCard";
 import { images } from "@/constants/images";
 import { languages } from "@/data/languages";
+import { posthog } from "@/lib/posthog";
+import { posthogLog } from "@/lib/posthog-log";
 import { useLanguageStore } from "@/store/languageStore";
 import { colors, fontFamily } from "@/theme";
 import type { LanguageId } from "@/types/learning";
@@ -44,6 +46,10 @@ export default function LanguageSelection() {
 
   const confirm = () => {
     setLanguage(selectedId);
+    posthog?.capture("language_selected", { language_id: selectedId });
+    posthogLog.info("language_selection_confirmed", {
+      language_id: selectedId,
+    });
     goBack();
   };
 

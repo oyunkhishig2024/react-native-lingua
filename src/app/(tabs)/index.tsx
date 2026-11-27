@@ -13,6 +13,8 @@ import { getLanguageById } from "@/data/languages";
 import { getLessonById } from "@/data/lessons";
 import { progress } from "@/data/progress";
 import { getUnitsByLanguage } from "@/data/units";
+import { posthog } from "@/lib/posthog";
+import { posthogLog } from "@/lib/posthog-log";
 import { useLanguageStore } from "@/store/languageStore";
 import { colors } from "@/theme";
 import type { Lesson } from "@/types/learning";
@@ -75,7 +77,19 @@ export default function Home() {
   const isLessonDone =
     lesson !== undefined && progress.completedLessonIds.includes(lesson.id);
 
-  const openLearn = () => router.navigate("/learn");
+  const openLearn = (entryPoint: "continue_card" | "today_plan") => {
+    posthog?.capture("learning_entry_opened", {
+      entry_point: entryPoint,
+      language_id: language.id,
+      ...(lesson ? { lesson_id: lesson.id } : {}),
+    });
+    posthogLog.info("learning_entry_opened", {
+      entry_point: entryPoint,
+      language_id: language.id,
+      ...(lesson ? { lesson_id: lesson.id } : {}),
+    });
+    router.navigate("/learn");
+  };
 
   return (
     <SafeAreaView edges={["top", "left", "right"]} style={styles.screen}>
@@ -141,7 +155,9 @@ export default function Home() {
               }
               buttonLabel={lesson ? "Continue" : "Change"}
               onPress={
-                lesson ? openLearn : () => router.push("/language-selection")
+                lesson
+                  ? () => openLearn("continue_card")
+                  : () => router.push("/language-selection")
               }
             />
           </View>
@@ -150,7 +166,7 @@ export default function Home() {
             {lesson ? (
               <TodayPlan
                 items={getTodayPlan(lesson, isLessonDone)}
-                onViewAll={openLearn}
+                onViewAll={() => openLearn("today_plan")}
               />
             ) : (
               <View className="items-center rounded-2xl bg-surface px-5 py-6">

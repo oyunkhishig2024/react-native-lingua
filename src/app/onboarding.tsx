@@ -3,8 +3,13 @@ import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { images } from "@/constants/images";
+import { posthog } from "@/lib/posthog";
 
 export default function Onboarding() {
+  const startSignUp = () => {
+    posthog?.capture("onboarding_get_started");
+    router.push("/sign-up");
+  };
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <View className="w-full max-w-[480px] flex-1 self-center px-7 pb-6">
@@ -72,7 +77,7 @@ export default function Onboarding() {
         {/* Get Started */}
         <Pressable
           className="onboarding__button"
-          onPress={() => router.push("/sign-up")}
+          onPress={startSignUp}
         >
           <Text className="onboarding__button-text">Get started</Text>
           <Text className="onboarding__button-chevron">›</Text>

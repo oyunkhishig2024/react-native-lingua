@@ -2,6 +2,7 @@ import { useClerk } from "@clerk/expo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Pressable, Text, View } from "react-native";
 
+import { posthog } from "@/lib/posthog";
 import { useLanguageStore } from "@/store/languageStore";
 
 export default function Profile() {
@@ -14,13 +15,18 @@ export default function Profile() {
     await AsyncStorage.clear();
   };
 
+  const handleSignOut = () => {
+    posthog?.capture("sign_out_requested");
+    return signOut();
+  };
+
   return (
     <View className="flex-1 items-center justify-center bg-background">
       <Text className="h2 text-text-primary">Profile</Text>
       <Text className="body-md mt-2 text-text-secondary">Coming soon</Text>
       <Pressable
         accessibilityRole="button"
-        onPress={() => signOut()}
+        onPress={handleSignOut}
         className="mt-6 h-10 items-center justify-center px-5"
       >
         <Text className="font-montserrat-semibold text-sm text-text-secondary">
