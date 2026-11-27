@@ -15,10 +15,10 @@ const CODE_LENGTH = 6;
 type VerificationModalProps = {
   email: string;
   onClose: () => void;
-  onComplete: () => void;
+  /** Resolves to `false` when the code was rejected */
+  onComplete: (code: string) => Promise<boolean>;
 };
 
-// UI only: any 6 digits are accepted.
 export function VerificationModal({
   email,
   onClose,
@@ -26,14 +26,22 @@ export function VerificationModal({
 }: VerificationModalProps) {
   const [code, setCode] = useState("");
   const inputRef = useRef<ComponentRef<typeof TextInput>>(null);
+  const isChecking = useRef(false);
   const insets = useSafeAreaInsets();
 
-  const handleChange = (text: string) => {
+  const handleChange = async (text: string) => {
+    if (isChecking.current) return;
+
     const digits = text.replace(/\D/g, "").slice(0, CODE_LENGTH);
     setCode(digits);
 
-    if (digits.length === CODE_LENGTH && code.length < CODE_LENGTH) {
-      onComplete();
+    if (digits.length === CODE_LENGTH) {
+      isChecking.current = true;
+      const isAccepted = await onComplete(digits);
+      isChecking.current = false;
+
+      // Empty the boxes so the user can try again
+      if (!isAccepted) setCode("");
     }
   };
 
