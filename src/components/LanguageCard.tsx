@@ -1,6 +1,6 @@
-import { Image } from "expo-image";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 
+import { Image } from "@/components/Image";
 import { images } from "@/constants/images";
 import type { Language } from "@/types/learning";
 
@@ -27,7 +27,7 @@ export function LanguageCard({
       <View className="language__flag">
         <Image
           source={language.flagUrl}
-          style={styles.flag}
+          className="h-full w-full"
           // China's stars sit on the left edge, so don't crop that side
           contentPosition={language.id === "zh" ? "left" : "center"}
         />
@@ -40,17 +40,11 @@ export function LanguageCard({
 
       {isSelected ? (
         <View className="language__check">
-          <Image source={images.check} style={styles.check} />
+          <Image source={images.check} className="h-[16px] w-[16px]" />
         </View>
       ) : (
-        <Image source={images.chevronRight} style={styles.chevron} />
+        <Image source={images.chevronRight} className="h-[20px] w-[20px]" />
       )}
     </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  flag: { width: "100%", height: "100%" },
-  check: { width: 16, height: 16 },
-  chevron: { width: 20, height: 20 },
-});

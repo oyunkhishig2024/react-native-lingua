@@ -1,12 +1,11 @@
-import { Image } from "expo-image";
 import type { BottomTabBarProps } from "expo-router/js-tabs";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 
+import { Image } from "@/components/Image";
 import { images } from "@/constants/images";
 import { colors } from "@/theme";
 
-const CIRCLE_SIZE = 52;
 const DURATION = 300;
 const INACTIVE_COLOR = "#69708F";
 
@@ -44,7 +43,7 @@ export function TabBar({
               { width: `${tabWidth}%`, left: `${state.index * tabWidth}%` },
             ]}
           >
-            <View style={styles.circle} />
+            <View className="h-[52px] w-[52px] rounded-full bg-lingua-deep-purple" />
           </Animated.View>
 
           {state.routes.map((route, index) => {
@@ -78,7 +77,7 @@ export function TabBar({
                     <Image
                       source={icon.active}
                       tintColor={colors.background}
-                      style={styles.icon}
+                      className="h-[26px] w-[26px]"
                     />
                   </Animated.View>
                 ) : (
@@ -86,7 +85,7 @@ export function TabBar({
                     <Image
                       source={icon.idle}
                       tintColor={INACTIVE_COLOR}
-                      style={styles.icon}
+                      className="h-[26px] w-[26px]"
                     />
                     <Text numberOfLines={1} className="tab-bar__label">
                       {title}
@@ -114,11 +113,4 @@ const styles = StyleSheet.create({
     transitionDuration: DURATION,
     transitionTimingFunction: "ease-in-out",
   },
-  circle: {
-    width: CIRCLE_SIZE,
-    height: CIRCLE_SIZE,
-    borderRadius: CIRCLE_SIZE / 2,
-    backgroundColor: colors.linguaDeepPurple,
-  },
-  icon: { width: 26, height: 26 },
 });

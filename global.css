@@ -154,6 +154,10 @@
   background-color: var(--color-lingua-deep-purple);
 }
 
+@utility auth__button--gradient {
+  background-image: linear-gradient(to right, #5b3bf6, #7b5cf5);
+}
+
 @utility auth__button-text {
   font-family: var(--font-montserrat-semibold);
   font-size: 17px;
@@ -293,4 +297,158 @@
   font-size: 11px;
   line-height: 14px;
   color: #69708f;
+}
+
+/* Home screen (BEM) */
+@utility home__greeting {
+  font-family: var(--font-montserrat-semibold);
+  font-size: 16px;
+  line-height: 22px;
+  color: var(--color-text-primary);
+}
+
+@utility home__streak {
+  font-family: var(--font-montserrat-medium);
+  font-size: 16px;
+  line-height: 22px;
+  color: #3b4466;
+}
+
+@utility home__flag {
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* Daily goal card (BEM) */
+@utility daily-goal {
+  flex-direction: row;
+  align-items: center;
+  height: 122px;
+  padding-left: 20px;
+  padding-right: 8px;
+  border-radius: 16px;
+  background-color: #fef6ed;
+}
+
+@utility daily-goal__label {
+  font-family: var(--font-montserrat-medium);
+  font-size: 15px;
+  line-height: 20px;
+  color: var(--color-text-primary);
+}
+
+@utility daily-goal__xp {
+  font-family: var(--font-montserrat-bold);
+  font-size: 28px;
+  line-height: 34px;
+  color: var(--color-text-primary);
+}
+
+@utility daily-goal__total {
+  font-family: var(--font-montserrat);
+  font-size: 15px;
+  color: #5b6480;
+}
+
+@utility daily-goal__track {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: #fce7d0;
+}
+
+@utility daily-goal__fill {
+  height: 8px;
+  border-radius: 4px;
+  background-color: #f68f2f;
+}
+
+/* Continue learning card (BEM) */
+@utility continue-card {
+  height: 170px;
+  overflow: hidden;
+  padding-top: 20px;
+  padding-left: 20px;
+  border-radius: 18px;
+  background-color: #5b43e9;
+}
+
+@utility continue-card__label {
+  font-family: var(--font-montserrat);
+  font-size: 15px;
+  line-height: 20px;
+  color: #ffffff;
+}
+
+@utility continue-card__title {
+  font-family: var(--font-montserrat-semibold);
+  font-size: 26px;
+  line-height: 32px;
+  color: #ffffff;
+}
+
+@utility continue-card__button {
+  align-self: flex-start;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  min-width: 100px;
+  padding-left: 18px;
+  padding-right: 18px;
+  border-radius: 14px;
+  background-color: #ffffff;
+}
+
+@utility continue-card__button-text {
+  font-family: var(--font-montserrat-semibold);
+  font-size: 15px;
+  color: var(--color-lingua-deep-purple);
+}
+
+/* Today's plan (BEM) */
+@utility plan__heading {
+  font-family: var(--font-montserrat-semibold);
+  font-size: 16px;
+  line-height: 22px;
+  color: var(--color-text-primary);
+}
+
+@utility plan__link {
+  font-family: var(--font-montserrat-semibold);
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--color-lingua-deep-purple);
+}
+
+@utility plan__icon {
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+@utility plan__title {
+  font-family: var(--font-montserrat-semibold);
+  font-size: 15px;
+  line-height: 20px;
+  color: var(--color-text-primary);
+}
+
+@utility plan__subtitle {
+  margin-top: 4px;
+  font-family: var(--font-montserrat);
+  font-size: 14px;
+  line-height: 20px;
+  color: #6b7394;
+}
+
+@utility plan__circle {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+  border-color: #7c83a3;
+  border-radius: 12px;
 }

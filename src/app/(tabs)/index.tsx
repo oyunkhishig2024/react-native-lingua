@@ -1,71 +1,173 @@
-import { useClerk } from "@clerk/expo";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Image } from "expo-image";
+import { useUser } from "@clerk/expo";
 import { router } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
+import { ContinueLearningCard } from "@/components/ContinueLearningCard";
+import { DailyGoalCard } from "@/components/DailyGoalCard";
+import { Image } from "@/components/Image";
+import { TodayPlan, type PlanItem } from "@/components/TodayPlan";
+import { images } from "@/constants/images";
 import { getLanguageById } from "@/data/languages";
+import { getLessonById } from "@/data/lessons";
+import { progress } from "@/data/progress";
+import { getUnitsByLanguage } from "@/data/units";
 import { useLanguageStore } from "@/store/languageStore";
+import { colors } from "@/theme";
+import type { Lesson } from "@/types/learning";
 
-export default function Index() {
-  const { signOut } = useClerk();
+function getTodayPlan(lesson: Lesson, isLessonDone: boolean): PlanItem[] {
+  const conversation = lesson.activities.find(
+    (activity) => activity.type === "conversation",
+  );
+
+  return [
+    {
+      id: "lesson",
+      title: "Lesson",
+      subtitle: lesson.title,
+      icon: images.planLesson,
+      tileClassName: "bg-[#5f48ee]",
+      isDone: isLessonDone,
+    },
+    {
+      id: "conversation",
+      title: "AI Conversation",
+      subtitle: conversation?.title ?? lesson.description,
+      icon: images.planConversation,
+      tileClassName: "bg-[#5f48ee]",
+      isDone: false,
+    },
+    {
+      id: "words",
+      title: "New words",
+      subtitle: `${lesson.vocabulary.length} words`,
+      icon: images.planWords,
+      tileClassName: "bg-[#ee706b]",
+      isDone: false,
+    },
+  ];
+}
+
+export default function Home() {
+  const { user } = useUser();
   const selectedId = useLanguageStore((state) => state.selectedLanguageId);
-  const resetLanguage = useLanguageStore((state) => state.resetLanguage);
   const language = selectedId ? getLanguageById(selectedId) : undefined;
 
-  // For testing: with no saved language, the app returns to language selection
-  const clearStorage = async () => {
-    resetLanguage();
-    await AsyncStorage.clear();
-  };
+  // The tab layout only opens once a language is selected
+  if (!language) {
+    return null;
+  }
+
+  const name =
+    user?.firstName ??
+    user?.username ??
+    user?.primaryEmailAddress?.emailAddress.split("@")[0] ??
+    "there";
+
+  // Some languages have no lessons yet, so these can be undefined
+  const lessonId = progress.currentLessonIds[language.id];
+  const lesson = lessonId ? getLessonById(lessonId) : undefined;
+  const unit = getUnitsByLanguage(language.id).find(
+    (item) => item.id === lesson?.unitId,
+  );
+  const isLessonDone =
+    lesson !== undefined && progress.completedLessonIds.includes(lesson.id);
+
+  const openLearn = () => router.navigate("/learn");
 
   return (
-    <View className="flex-1 items-center justify-center bg-background">
-      <Text className="h2 text-lingua-purple">Lingua</Text>
-      {language && (
-        <View className="mt-3 flex-row items-center gap-3">
-          <View className="language__flag">
+    <SafeAreaView edges={["top", "left", "right"]} style={styles.screen}>
+      <StatusBar style="dark" />
+      <ScrollView
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <View className="w-full max-w-[480px] self-center px-4">
+          {/* Header: flag, greeting, streak, notifications */}
+          <View className="mt-4 h-8 flex-row items-center">
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={`Learning ${language.name}. Change language`}
+              hitSlop={8}
+              onPress={() => router.push("/language-selection")}
+              className="home__flag"
+            >
+              <Image
+                source={language.flagUrl}
+                className="h-full w-full"
+                // China's stars sit on the left edge, so don't crop that side
+                contentPosition={language.id === "zh" ? "left" : "center"}
+              />
+            </Pressable>
+            <Text numberOfLines={1} className="home__greeting ml-3 flex-1">
+              {language.greeting}, {name}! 👋
+            </Text>
+
+            <View
+              accessible
+              accessibilityLabel={`${progress.streakDays} day streak`}
+              className="ml-2 flex-row items-center"
+            >
+              {/* Crops the square campfire image down to just the flame */}
+              <View className="h-[25px] w-[22px] overflow-hidden rounded-b-[11px]">
+                <Image
+                  source={images.streakFire}
+                  className="absolute left-[-14px] top-[-9px] h-[50px] w-[50px]"
+                />
+              </View>
+              <Text className="home__streak ml-2">{progress.streakDays}</Text>
+            </View>
             <Image
-              source={language.flagUrl}
-              style={styles.flag}
-              // China's stars sit on the left edge, so don't crop that side
-              contentPosition={language.id === "zh" ? "left" : "center"}
+              accessibilityLabel="Notifications"
+              source={images.bell}
+              className="ml-[22px] mr-[2px] h-[24px] w-[24px]"
             />
           </View>
-          <Text className="language__name">Learning {language.name}</Text>
+
+          <View className="mt-7">
+            <DailyGoalCard
+              xp={isLessonDone ? lesson.xpReward : 0}
+              goal={progress.dailyGoalXp}
+            />
+          </View>
+
+          <View className="mt-5">
+            <ContinueLearningCard
+              languageName={language.name}
+              subtitle={
+                unit ? `${unit.level} • Unit ${unit.order}` : "Coming soon"
+              }
+              buttonLabel={lesson ? "Continue" : "Change"}
+              onPress={
+                lesson ? openLearn : () => router.push("/language-selection")
+              }
+            />
+          </View>
+
+          <View className="mt-6">
+            {lesson ? (
+              <TodayPlan
+                items={getTodayPlan(lesson, isLessonDone)}
+                onViewAll={openLearn}
+              />
+            ) : (
+              <View className="items-center rounded-2xl bg-surface px-5 py-6">
+                <Text className="plan__title">No plan yet</Text>
+                <Text className="plan__subtitle text-center">
+                  {language.name} lessons are on the way.
+                </Text>
+              </View>
+            )}
+          </View>
         </View>
-      )}
-      <Pressable
-        accessibilityRole="button"
-        onPress={() => router.push("/language-selection")}
-        className="mt-4 h-10 items-center justify-center rounded-[14px] bg-lingua-deep-purple px-5"
-      >
-        <Text className="font-montserrat-semibold text-sm text-white">
-          Choose a language
-        </Text>
-      </Pressable>
-      <Pressable
-        accessibilityRole="button"
-        onPress={() => signOut()}
-        className="mt-2 h-10 items-center justify-center px-5"
-      >
-        <Text className="font-montserrat-semibold text-sm text-text-secondary">
-          Sign Out
-        </Text>
-      </Pressable>
-      <Pressable
-        accessibilityRole="button"
-        onPress={clearStorage}
-        className="mt-2 h-10 items-center justify-center px-5"
-      >
-        <Text className="font-montserrat-semibold text-sm text-text-secondary">
-          Clear Storage (testing)
-        </Text>
-      </Pressable>
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  flag: { width: "100%", height: "100%" },
+  screen: { flex: 1, backgroundColor: colors.background },
+  content: { paddingBottom: 16 },
 });

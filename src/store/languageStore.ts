@@ -29,6 +29,9 @@ export const useLanguageStore = create<LanguageState>()(
       partialize: ({ selectedLanguageId }) => ({ selectedLanguageId }),
       // Also runs when reading fails, so the app never stays on the splash screen
       onRehydrateStorage: (state) => () => state.setHasHydrated(),
+      // Web pages are first rendered on the server, which has no storage and
+      // would crash. `window` only exists in the browser and on phones.
+      skipHydration: typeof window === "undefined",
     },
   ),
 );

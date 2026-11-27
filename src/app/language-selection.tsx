@@ -1,4 +1,3 @@
-import { Image } from "expo-image";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
@@ -13,6 +12,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { Image } from "@/components/Image";
 import { LanguageCard } from "@/components/LanguageCard";
 import { images } from "@/constants/images";
 import { languages } from "@/data/languages";
@@ -62,7 +62,7 @@ export default function LanguageSelection() {
             onPress={goBack}
             className="absolute left-5 h-10 w-10 justify-center"
           >
-            <Image source={images.chevronLeft} style={styles.icon} />
+            <Image source={images.chevronLeft} className="h-[24px] w-[24px]" />
           </Pressable>
         </View>
 
@@ -73,7 +73,7 @@ export default function LanguageSelection() {
         >
           <View className="px-5">
             <View className="language__search mt-3.5">
-              <Image source={images.search} style={styles.searchIcon} />
+              <Image source={images.search} className="h-[20px] w-[20px]" />
               <TextInput
                 accessibilityLabel="Search languages"
                 value={query}
@@ -132,8 +132,6 @@ export default function LanguageSelection() {
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.background },
   scrollContent: { flexGrow: 1 },
-  icon: { width: 24, height: 24 },
-  searchIcon: { width: 20, height: 20 },
   input: {
     flex: 1,
     height: "100%",
