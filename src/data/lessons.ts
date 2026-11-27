@@ -1,4 +1,5 @@
-import type { AITeacherPrompt, Lesson } from "@/types/learning";
+import { getUnitsByLanguage } from "@/data/units";
+import type { AITeacherPrompt, LanguageId, Lesson } from "@/types/learning";
 
 // Every teacher follows the same rules, so only the lesson details change.
 function createTeacherPrompt(
@@ -19,6 +20,20 @@ function createTeacherPrompt(
   };
 }
 
+// Placeholder photos from Unsplash, one per topic and shared by every language
+function unsplash(photoId: string) {
+  return `https://images.unsplash.com/photo-${photoId}?w=800&h=600&fit=crop&q=70`;
+}
+
+const lessonImages = {
+  greetings: unsplash("1529156069898-49953e39b3ac"),
+  dailyLife: unsplash("1484154218962-a197022b5858"),
+  cafe: unsplash("1445116572660-236099ec97a0"),
+  travel: unsplash("1488646953014-85cb44e25828"),
+  shopping: unsplash("1441986300917-64674bd600d8"),
+  family: unsplash("1511895426328-dc8714191300"),
+};
+
 export const lessons: Lesson[] = [
   // ---------- Spanish ----------
   {
@@ -27,6 +42,7 @@ export const lessons: Lesson[] = [
     order: 1,
     title: "Greetings & Introductions",
     description: "Say hello and tell people your name.",
+    imageUrl: lessonImages.greetings,
     xpReward: 10,
     goals: ["Greet someone", "Introduce yourself", "Say goodbye"],
     vocabulary: [
@@ -63,6 +79,7 @@ export const lessons: Lesson[] = [
     order: 2,
     title: "Daily Life",
     description: "Talk about your day.",
+    imageUrl: lessonImages.dailyLife,
     xpReward: 10,
     goals: ["Name parts of the day", "Say what you do each day"],
     vocabulary: [
@@ -99,6 +116,7 @@ export const lessons: Lesson[] = [
     order: 1,
     title: "At the Café",
     description: "Order a drink and ask for the bill.",
+    imageUrl: lessonImages.cafe,
     xpReward: 15,
     goals: ["Order a drink politely", "Ask for the bill"],
     vocabulary: [
@@ -129,6 +147,117 @@ export const lessons: Lesson[] = [
       "Hi there! Imagine we're in a café in Spain. Let's learn how to order a coffee.",
     ),
   },
+  {
+    id: "es-travel",
+    unitId: "es-unit-2",
+    order: 2,
+    title: "Travel & Directions",
+    description: "Ask where places are and follow directions.",
+    imageUrl: lessonImages.travel,
+    xpReward: 15,
+    goals: ["Ask where a place is", "Understand left and right"],
+    vocabulary: [
+      { id: "estacion", term: "la estación", translation: "the station", pronunciation: "lah ehs-tah-SYOHN" },
+      { id: "izquierda", term: "a la izquierda", translation: "to the left", pronunciation: "ah lah ees-KYEHR-dah" },
+      { id: "derecha", term: "a la derecha", translation: "to the right", pronunciation: "ah lah deh-REH-chah" },
+    ],
+    phrases: [
+      { id: "donde-esta", text: "¿Dónde está la estación?", translation: "Where is the station?", pronunciation: "DOHN-deh ehs-TAH lah ehs-tah-SYOHN" },
+      { id: "todo-recto", text: "Siga todo recto.", translation: "Go straight ahead.", pronunciation: "SEE-gah TOH-doh REHK-toh" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "What does “a la derecha” mean?",
+        options: ["to the left", "to the right", "the station"],
+        correctAnswer: "to the right",
+      },
+      { id: "talk", type: "conversation", title: "Find your way", scenario: "You are lost and ask a local for help." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "Spanish",
+      "directions: la estación, a la izquierda, a la derecha, ¿Dónde está...?, Siga todo recto.",
+      "Hola! Today we'll find our way around a Spanish city. Are you ready?",
+    ),
+  },
+  {
+    id: "es-shopping",
+    unitId: "es-unit-2",
+    order: 3,
+    title: "Shopping",
+    description: "Ask for prices and buy something.",
+    imageUrl: lessonImages.shopping,
+    xpReward: 15,
+    goals: ["Ask how much something costs", "Say what you want to buy"],
+    vocabulary: [
+      { id: "tienda", term: "la tienda", translation: "the shop", pronunciation: "lah TYEHN-dah" },
+      { id: "camisa", term: "la camisa", translation: "the shirt", pronunciation: "lah kah-MEE-sah" },
+      { id: "dinero", term: "el dinero", translation: "money", pronunciation: "ehl dee-NEH-roh" },
+    ],
+    phrases: [
+      { id: "cuanto-cuesta", text: "¿Cuánto cuesta?", translation: "How much does it cost?", pronunciation: "KWAHN-toh KWEHS-tah" },
+      { id: "me-la-llevo", text: "Me la llevo.", translation: "I'll take it.", pronunciation: "meh lah YEH-boh" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "How do you ask the price?",
+        options: ["¿Cuánto cuesta?", "¿Dónde está?", "¿Cómo estás?"],
+        correctAnswer: "¿Cuánto cuesta?",
+      },
+      { id: "talk", type: "conversation", title: "At the shop", scenario: "You are a shopper and the teacher is the shop assistant." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "Spanish",
+      "shopping: la tienda, la camisa, el dinero, ¿Cuánto cuesta?, Me la llevo.",
+      "Hi! Let's go shopping in Spanish. First word: la tienda.",
+    ),
+  },
+  {
+    id: "es-family",
+    unitId: "es-unit-2",
+    order: 4,
+    title: "Family & Friends",
+    description: "Talk about the people in your life.",
+    imageUrl: lessonImages.family,
+    xpReward: 15,
+    goals: ["Name family members", "Introduce a friend"],
+    vocabulary: [
+      { id: "madre", term: "la madre", translation: "the mother", pronunciation: "lah MAH-dreh" },
+      { id: "padre", term: "el padre", translation: "the father", pronunciation: "ehl PAH-dreh" },
+      { id: "amigo", term: "el amigo", translation: "the friend", pronunciation: "ehl ah-MEE-goh" },
+    ],
+    phrases: [
+      { id: "esta-es", text: "Esta es mi madre.", translation: "This is my mother.", pronunciation: "EHS-tah ehs mee MAH-dreh" },
+      { id: "tengo", text: "Tengo un hermano.", translation: "I have a brother.", pronunciation: "TEHN-goh oon ehr-MAH-noh" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "What does “el padre” mean?",
+        options: ["the mother", "the father", "the friend"],
+        correctAnswer: "the father",
+      },
+      { id: "talk", type: "conversation", title: "Meet my family", scenario: "You show a friend a family photo." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "Spanish",
+      "family and friends: la madre, el padre, el amigo, Esta es mi..., Tengo...",
+      "Hello again! Let's talk about your family in Spanish.",
+    ),
+  },
 
   // ---------- French ----------
   {
@@ -137,6 +266,7 @@ export const lessons: Lesson[] = [
     order: 1,
     title: "Greetings & Introductions",
     description: "Say hello and tell people your name.",
+    imageUrl: lessonImages.greetings,
     xpReward: 10,
     goals: ["Greet someone", "Introduce yourself", "Say goodbye"],
     vocabulary: [
@@ -173,6 +303,7 @@ export const lessons: Lesson[] = [
     order: 2,
     title: "At the Café",
     description: "Order a drink and ask for the bill.",
+    imageUrl: lessonImages.cafe,
     xpReward: 15,
     goals: ["Order a drink politely", "Ask for the bill"],
     vocabulary: [
@@ -211,6 +342,7 @@ export const lessons: Lesson[] = [
     order: 1,
     title: "Greetings & Introductions",
     description: "Say hello and tell people your name.",
+    imageUrl: lessonImages.greetings,
     xpReward: 10,
     goals: ["Greet someone", "Introduce yourself", "Say goodbye"],
     vocabulary: [
@@ -247,6 +379,7 @@ export const lessons: Lesson[] = [
     order: 2,
     title: "At the Café",
     description: "Order a drink and ask for the bill.",
+    imageUrl: lessonImages.cafe,
     xpReward: 15,
     goals: ["Order a drink politely", "Ask for the bill"],
     vocabulary: [
@@ -277,12 +410,691 @@ export const lessons: Lesson[] = [
       "Hi there! Imagine we're in a café in Tokyo. Let's learn how to order a coffee.",
     ),
   },
+
+  // ---------- Korean ----------
+  {
+    id: "ko-greetings",
+    unitId: "ko-unit-1",
+    order: 1,
+    title: "Greetings & Introductions",
+    description: "Say hello and tell people your name.",
+    imageUrl: lessonImages.greetings,
+    xpReward: 10,
+    goals: ["Greet someone", "Introduce yourself", "Say goodbye"],
+    vocabulary: [
+      { id: "annyeong", term: "안녕하세요", translation: "hello", pronunciation: "ahn-nyawng-hah-seh-yo" },
+      { id: "jal-ga", term: "안녕히 가세요", translation: "goodbye", pronunciation: "ahn-nyawng-hee gah-seh-yo" },
+      { id: "gamsa", term: "감사합니다", translation: "thank you", pronunciation: "gahm-sah-hahm-nee-dah" },
+    ],
+    phrases: [
+      { id: "jeoneun", text: "저는 알렉스예요.", translation: "I am Alex.", pronunciation: "juh-neun ahl-lehk-seu-yeh-yo" },
+      { id: "bangapseumnida", text: "반갑습니다.", translation: "Nice to meet you.", pronunciation: "bahn-gahp-seum-nee-dah" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "How do you say “thank you”?",
+        options: ["안녕하세요", "감사합니다", "안녕히 가세요"],
+        correctAnswer: "감사합니다",
+      },
+      { id: "talk", type: "conversation", title: "Meet someone", scenario: "You meet a new neighbor." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "Korean",
+      "greetings and introductions: annyeonghaseyo, annyeonghi gaseyo, gamsahamnida, jeoneun ... yeyo, bangapseumnida.",
+      "Hi! Today we'll learn to say hello in Korean. Repeat after me: annyeonghaseyo.",
+    ),
+  },
+  {
+    id: "ko-daily-life",
+    unitId: "ko-unit-1",
+    order: 2,
+    title: "Daily Life",
+    description: "Talk about your day.",
+    imageUrl: lessonImages.dailyLife,
+    xpReward: 10,
+    goals: ["Name parts of the day", "Say what you do each day"],
+    vocabulary: [
+      { id: "achim", term: "아침", translation: "morning", pronunciation: "ah-chim" },
+      { id: "bam", term: "밤", translation: "night", pronunciation: "bahm" },
+      { id: "il", term: "일", translation: "work", pronunciation: "eel" },
+    ],
+    phrases: [
+      { id: "ireonayo", text: "일찍 일어나요.", translation: "I wake up early.", pronunciation: "eel-jjik ee-ruh-nah-yo" },
+      { id: "hoesa", text: "회사에 가요.", translation: "I go to the office.", pronunciation: "hweh-sah-eh gah-yo" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "What does “밤” mean?",
+        options: ["morning", "night", "work"],
+        correctAnswer: "night",
+      },
+      { id: "talk", type: "conversation", title: "Your day", scenario: "A friend asks about your day." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "Korean",
+      "daily routine: achim, bam, il, iljjik ireonayo, hoesa-e gayo.",
+      "Welcome back! Let's talk about your day in Korean. Are you ready?",
+    ),
+  },
+  {
+    id: "ko-cafe",
+    unitId: "ko-unit-1",
+    order: 3,
+    title: "At the Café",
+    description: "Order a drink and ask for the bill.",
+    imageUrl: lessonImages.cafe,
+    xpReward: 15,
+    goals: ["Order a drink politely", "Ask for the bill"],
+    vocabulary: [
+      { id: "keopi", term: "커피", translation: "coffee", pronunciation: "kuh-pee" },
+      { id: "mul", term: "물", translation: "water", pronunciation: "mool" },
+      { id: "gyesanseo", term: "계산서", translation: "the bill", pronunciation: "gyeh-sahn-suh" },
+    ],
+    phrases: [
+      { id: "keopi-juseyo", text: "커피 주세요.", translation: "Coffee, please.", pronunciation: "kuh-pee joo-seh-yo" },
+      { id: "gyesan", text: "계산해 주세요.", translation: "The bill, please.", pronunciation: "gyeh-sahn-heh joo-seh-yo" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "What does “물” mean?",
+        options: ["coffee", "water", "the bill"],
+        correctAnswer: "water",
+      },
+      { id: "talk", type: "conversation", title: "Order a coffee", scenario: "You are a customer and the teacher is the server." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "Korean",
+      "ordering at a café: keopi, mul, gyesanseo, ... juseyo. End with a short role-play as the server.",
+      "Hi there! Imagine we're in a café in Seoul. Let's learn how to order a coffee.",
+    ),
+  },
+  {
+    id: "ko-travel",
+    unitId: "ko-unit-1",
+    order: 4,
+    title: "Travel & Directions",
+    description: "Ask where places are and follow directions.",
+    imageUrl: lessonImages.travel,
+    xpReward: 15,
+    goals: ["Ask where a place is", "Understand left and right"],
+    vocabulary: [
+      { id: "yeok", term: "역", translation: "station", pronunciation: "yuhk" },
+      { id: "oenjjok", term: "왼쪽", translation: "left", pronunciation: "wehn-jjok" },
+      { id: "oreunjjok", term: "오른쪽", translation: "right", pronunciation: "oh-reun-jjok" },
+    ],
+    phrases: [
+      { id: "eodi", text: "역이 어디예요?", translation: "Where is the station?", pronunciation: "yuh-gee uh-dee-yeh-yo" },
+      { id: "jikjin", text: "똑바로 가세요.", translation: "Go straight ahead.", pronunciation: "ttok-bah-ro gah-seh-yo" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "What does “왼쪽” mean?",
+        options: ["left", "right", "station"],
+        correctAnswer: "left",
+      },
+      { id: "talk", type: "conversation", title: "Find your way", scenario: "You are lost and ask a local for help." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "Korean",
+      "directions: yeok, oenjjok, oreunjjok, ... eodiyeyo?, ttokbaro gaseyo.",
+      "Hi! Today we'll find our way around Seoul. First word: yeok.",
+    ),
+  },
+  {
+    id: "ko-shopping",
+    unitId: "ko-unit-1",
+    order: 5,
+    title: "Shopping",
+    description: "Ask for prices and buy something.",
+    imageUrl: lessonImages.shopping,
+    xpReward: 15,
+    goals: ["Ask how much something costs", "Say what you want to buy"],
+    vocabulary: [
+      { id: "gage", term: "가게", translation: "shop", pronunciation: "gah-geh" },
+      { id: "ot", term: "옷", translation: "clothes", pronunciation: "oht" },
+      { id: "don", term: "돈", translation: "money", pronunciation: "dohn" },
+    ],
+    phrases: [
+      { id: "eolma", text: "이거 얼마예요?", translation: "How much is this?", pronunciation: "ee-guh uhl-mah-yeh-yo" },
+      { id: "igeo-juseyo", text: "이거 주세요.", translation: "I'll take this, please.", pronunciation: "ee-guh joo-seh-yo" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "How do you ask the price?",
+        options: ["이거 얼마예요?", "역이 어디예요?", "이거 주세요."],
+        correctAnswer: "이거 얼마예요?",
+      },
+      { id: "talk", type: "conversation", title: "At the shop", scenario: "You are a shopper and the teacher is the shop assistant." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "Korean",
+      "shopping: gage, ot, don, igeo eolmayeyo?, igeo juseyo.",
+      "Hi! Let's go shopping in Korean. First word: gage.",
+    ),
+  },
+  {
+    id: "ko-family",
+    unitId: "ko-unit-1",
+    order: 6,
+    title: "Family & Friends",
+    description: "Talk about the people in your life.",
+    imageUrl: lessonImages.family,
+    xpReward: 15,
+    goals: ["Name family members", "Introduce a friend"],
+    vocabulary: [
+      { id: "eomma", term: "엄마", translation: "mom", pronunciation: "uhm-mah" },
+      { id: "appa", term: "아빠", translation: "dad", pronunciation: "ah-ppah" },
+      { id: "chingu", term: "친구", translation: "friend", pronunciation: "chin-goo" },
+    ],
+    phrases: [
+      { id: "uri-eomma", text: "우리 엄마예요.", translation: "This is my mom.", pronunciation: "oo-ree uhm-mah-yeh-yo" },
+      { id: "nae-chingu", text: "제 친구예요.", translation: "This is my friend.", pronunciation: "jeh chin-goo-yeh-yo" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "What does “친구” mean?",
+        options: ["mom", "dad", "friend"],
+        correctAnswer: "friend",
+      },
+      { id: "talk", type: "conversation", title: "Meet my family", scenario: "You show a friend a family photo." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "Korean",
+      "family and friends: eomma, appa, chingu, uri ... yeyo, je chingu-yeyo.",
+      "Hello again! Let's talk about your family in Korean.",
+    ),
+  },
+
+  // ---------- German ----------
+  {
+    id: "de-greetings",
+    unitId: "de-unit-1",
+    order: 1,
+    title: "Greetings & Introductions",
+    description: "Say hello and tell people your name.",
+    imageUrl: lessonImages.greetings,
+    xpReward: 10,
+    goals: ["Greet someone", "Introduce yourself", "Say goodbye"],
+    vocabulary: [
+      { id: "hallo", term: "hallo", translation: "hello", pronunciation: "HAH-loh" },
+      { id: "tschuss", term: "tschüss", translation: "bye", pronunciation: "chews" },
+      { id: "danke", term: "danke", translation: "thank you", pronunciation: "DAHN-kuh" },
+    ],
+    phrases: [
+      { id: "ich-heisse", text: "Ich heiße Alex.", translation: "My name is Alex.", pronunciation: "ikh HIGH-suh AH-lehks" },
+      { id: "wie-gehts", text: "Wie geht's?", translation: "How are you?", pronunciation: "vee GAYTS" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "How do you say “thank you”?",
+        options: ["hallo", "danke", "tschüss"],
+        correctAnswer: "danke",
+      },
+      { id: "talk", type: "conversation", title: "Meet someone", scenario: "You meet a new neighbor." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "German",
+      "greetings and introductions: hallo, tschüss, danke, Ich heiße..., Wie geht's?",
+      "Hi! Today we'll learn to say hello in German. Repeat after me: hallo.",
+    ),
+  },
+  {
+    id: "de-daily-life",
+    unitId: "de-unit-1",
+    order: 2,
+    title: "Daily Life",
+    description: "Talk about your day.",
+    imageUrl: lessonImages.dailyLife,
+    xpReward: 10,
+    goals: ["Name parts of the day", "Say what you do each day"],
+    vocabulary: [
+      { id: "morgen", term: "der Morgen", translation: "the morning", pronunciation: "dehr MOR-gen" },
+      { id: "nacht", term: "die Nacht", translation: "the night", pronunciation: "dee NAHKHT" },
+      { id: "arbeit", term: "die Arbeit", translation: "work", pronunciation: "dee AR-bite" },
+    ],
+    phrases: [
+      { id: "aufstehen", text: "Ich stehe früh auf.", translation: "I get up early.", pronunciation: "ikh SHTAY-uh frew OWF" },
+      { id: "zur-arbeit", text: "Ich gehe zur Arbeit.", translation: "I go to work.", pronunciation: "ikh GAY-uh tsoor AR-bite" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "What does “die Nacht” mean?",
+        options: ["the morning", "the night", "work"],
+        correctAnswer: "the night",
+      },
+      { id: "talk", type: "conversation", title: "Your day", scenario: "A friend asks about your day." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "German",
+      "daily routine: der Morgen, die Nacht, die Arbeit, Ich stehe früh auf, Ich gehe zur Arbeit.",
+      "Welcome back! Let's talk about your day in German. Are you ready?",
+    ),
+  },
+  {
+    id: "de-cafe",
+    unitId: "de-unit-1",
+    order: 3,
+    title: "At the Café",
+    description: "Order a drink and ask for the bill.",
+    imageUrl: lessonImages.cafe,
+    xpReward: 15,
+    goals: ["Order a drink politely", "Ask for the bill"],
+    vocabulary: [
+      { id: "kaffee", term: "der Kaffee", translation: "coffee", pronunciation: "dehr KAH-fay" },
+      { id: "wasser", term: "das Wasser", translation: "water", pronunciation: "dahs VAH-ser" },
+      { id: "rechnung", term: "die Rechnung", translation: "the bill", pronunciation: "dee REKH-noong" },
+    ],
+    phrases: [
+      { id: "ich-haette", text: "Ich hätte gern einen Kaffee.", translation: "I would like a coffee.", pronunciation: "ikh HEH-tuh gehrn EYE-nen KAH-fay" },
+      { id: "die-rechnung", text: "Die Rechnung, bitte.", translation: "The bill, please.", pronunciation: "dee REKH-noong BIT-uh" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "How do you ask for the bill?",
+        options: ["Die Rechnung, bitte.", "Einen Kaffee, bitte.", "Vielen Dank."],
+        correctAnswer: "Die Rechnung, bitte.",
+      },
+      { id: "talk", type: "conversation", title: "Order a coffee", scenario: "You are a customer and the teacher is the server." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "German",
+      "ordering at a café: der Kaffee, das Wasser, die Rechnung, Ich hätte gern..., bitte. End with a short role-play as the server.",
+      "Hi there! Imagine we're in a café in Berlin. Let's learn how to order a coffee.",
+    ),
+  },
+  {
+    id: "de-travel",
+    unitId: "de-unit-1",
+    order: 4,
+    title: "Travel & Directions",
+    description: "Ask where places are and follow directions.",
+    imageUrl: lessonImages.travel,
+    xpReward: 15,
+    goals: ["Ask where a place is", "Understand left and right"],
+    vocabulary: [
+      { id: "bahnhof", term: "der Bahnhof", translation: "the train station", pronunciation: "dehr BAHN-hohf" },
+      { id: "links", term: "links", translation: "left", pronunciation: "links" },
+      { id: "rechts", term: "rechts", translation: "right", pronunciation: "rekhts" },
+    ],
+    phrases: [
+      { id: "wo-ist", text: "Wo ist der Bahnhof?", translation: "Where is the train station?", pronunciation: "voh ist dehr BAHN-hohf" },
+      { id: "geradeaus", text: "Gehen Sie geradeaus.", translation: "Go straight ahead.", pronunciation: "GAY-en zee guh-RAH-duh-ows" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "What does “links” mean?",
+        options: ["left", "right", "straight ahead"],
+        correctAnswer: "left",
+      },
+      { id: "talk", type: "conversation", title: "Find your way", scenario: "You are lost and ask a local for help." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "German",
+      "directions: der Bahnhof, links, rechts, Wo ist...?, Gehen Sie geradeaus.",
+      "Hi! Today we'll find our way around a German city. First word: der Bahnhof.",
+    ),
+  },
+  {
+    id: "de-shopping",
+    unitId: "de-unit-1",
+    order: 5,
+    title: "Shopping",
+    description: "Ask for prices and buy something.",
+    imageUrl: lessonImages.shopping,
+    xpReward: 15,
+    goals: ["Ask how much something costs", "Say what you want to buy"],
+    vocabulary: [
+      { id: "laden", term: "der Laden", translation: "the shop", pronunciation: "dehr LAH-den" },
+      { id: "hemd", term: "das Hemd", translation: "the shirt", pronunciation: "dahs hemt" },
+      { id: "geld", term: "das Geld", translation: "money", pronunciation: "dahs gelt" },
+    ],
+    phrases: [
+      { id: "was-kostet", text: "Was kostet das?", translation: "How much is that?", pronunciation: "vahs KOS-tet dahs" },
+      { id: "nehme", text: "Ich nehme es.", translation: "I'll take it.", pronunciation: "ikh NAY-muh es" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "How do you ask the price?",
+        options: ["Was kostet das?", "Wo ist das?", "Wie geht's?"],
+        correctAnswer: "Was kostet das?",
+      },
+      { id: "talk", type: "conversation", title: "At the shop", scenario: "You are a shopper and the teacher is the shop assistant." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "German",
+      "shopping: der Laden, das Hemd, das Geld, Was kostet das?, Ich nehme es.",
+      "Hi! Let's go shopping in German. First word: der Laden.",
+    ),
+  },
+  {
+    id: "de-family",
+    unitId: "de-unit-1",
+    order: 6,
+    title: "Family & Friends",
+    description: "Talk about the people in your life.",
+    imageUrl: lessonImages.family,
+    xpReward: 15,
+    goals: ["Name family members", "Introduce a friend"],
+    vocabulary: [
+      { id: "mutter", term: "die Mutter", translation: "the mother", pronunciation: "dee MOO-ter" },
+      { id: "vater", term: "der Vater", translation: "the father", pronunciation: "dehr FAH-ter" },
+      { id: "freund", term: "der Freund", translation: "the friend", pronunciation: "dehr froynt" },
+    ],
+    phrases: [
+      { id: "das-ist", text: "Das ist meine Mutter.", translation: "This is my mother.", pronunciation: "dahs ist MY-nuh MOO-ter" },
+      { id: "bruder", text: "Ich habe einen Bruder.", translation: "I have a brother.", pronunciation: "ikh HAH-buh EYE-nen BROO-der" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "What does “der Vater” mean?",
+        options: ["the mother", "the father", "the friend"],
+        correctAnswer: "the father",
+      },
+      { id: "talk", type: "conversation", title: "Meet my family", scenario: "You show a friend a family photo." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "German",
+      "family and friends: die Mutter, der Vater, der Freund, Das ist..., Ich habe...",
+      "Hello again! Let's talk about your family in German.",
+    ),
+  },
+
+  // ---------- Chinese ----------
+  {
+    id: "zh-greetings",
+    unitId: "zh-unit-1",
+    order: 1,
+    title: "Greetings & Introductions",
+    description: "Say hello and tell people your name.",
+    imageUrl: lessonImages.greetings,
+    xpReward: 10,
+    goals: ["Greet someone", "Introduce yourself", "Say goodbye"],
+    vocabulary: [
+      { id: "ni-hao", term: "你好", translation: "hello", pronunciation: "nǐ hǎo" },
+      { id: "zai-jian", term: "再见", translation: "goodbye", pronunciation: "zài jiàn" },
+      { id: "xie-xie", term: "谢谢", translation: "thank you", pronunciation: "xiè xie" },
+    ],
+    phrases: [
+      { id: "wo-jiao", text: "我叫Alex。", translation: "My name is Alex.", pronunciation: "wǒ jiào Alex" },
+      { id: "ni-hao-ma", text: "你好吗？", translation: "How are you?", pronunciation: "nǐ hǎo ma" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "How do you say “thank you”?",
+        options: ["你好", "谢谢", "再见"],
+        correctAnswer: "谢谢",
+      },
+      { id: "talk", type: "conversation", title: "Meet someone", scenario: "You meet a new neighbor." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "Chinese",
+      "greetings and introductions: nǐ hǎo, zài jiàn, xiè xie, wǒ jiào..., nǐ hǎo ma?",
+      "Hi! Today we'll learn to say hello in Chinese. Repeat after me: nǐ hǎo.",
+    ),
+  },
+  {
+    id: "zh-daily-life",
+    unitId: "zh-unit-1",
+    order: 2,
+    title: "Daily Life",
+    description: "Talk about your day.",
+    imageUrl: lessonImages.dailyLife,
+    xpReward: 10,
+    goals: ["Name parts of the day", "Say what you do each day"],
+    vocabulary: [
+      { id: "zao-shang", term: "早上", translation: "morning", pronunciation: "zǎo shang" },
+      { id: "wan-shang", term: "晚上", translation: "evening", pronunciation: "wǎn shang" },
+      { id: "gong-zuo", term: "工作", translation: "work", pronunciation: "gōng zuò" },
+    ],
+    phrases: [
+      { id: "qi-chuang", text: "我很早起床。", translation: "I get up early.", pronunciation: "wǒ hěn zǎo qǐ chuáng" },
+      { id: "shang-ban", text: "我去上班。", translation: "I go to work.", pronunciation: "wǒ qù shàng bān" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "What does “晚上” mean?",
+        options: ["morning", "evening", "work"],
+        correctAnswer: "evening",
+      },
+      { id: "talk", type: "conversation", title: "Your day", scenario: "A friend asks about your day." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "Chinese",
+      "daily routine: zǎo shang, wǎn shang, gōng zuò, wǒ hěn zǎo qǐ chuáng, wǒ qù shàng bān.",
+      "Welcome back! Let's talk about your day in Chinese. Are you ready?",
+    ),
+  },
+  {
+    id: "zh-cafe",
+    unitId: "zh-unit-1",
+    order: 3,
+    title: "At the Café",
+    description: "Order a drink and ask for the bill.",
+    imageUrl: lessonImages.cafe,
+    xpReward: 15,
+    goals: ["Order a drink politely", "Ask for the bill"],
+    vocabulary: [
+      { id: "ka-fei", term: "咖啡", translation: "coffee", pronunciation: "kā fēi" },
+      { id: "shui", term: "水", translation: "water", pronunciation: "shuǐ" },
+      { id: "zhang-dan", term: "账单", translation: "the bill", pronunciation: "zhàng dān" },
+    ],
+    phrases: [
+      { id: "wo-yao", text: "我要一杯咖啡。", translation: "I would like a coffee.", pronunciation: "wǒ yào yì bēi kā fēi" },
+      { id: "mai-dan", text: "买单，谢谢。", translation: "The bill, please.", pronunciation: "mǎi dān, xiè xie" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "What does “水” mean?",
+        options: ["coffee", "water", "the bill"],
+        correctAnswer: "water",
+      },
+      { id: "talk", type: "conversation", title: "Order a coffee", scenario: "You are a customer and the teacher is the server." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "Chinese",
+      "ordering at a café: kā fēi, shuǐ, zhàng dān, wǒ yào..., mǎi dān. End with a short role-play as the server.",
+      "Hi there! Imagine we're in a café in Shanghai. Let's learn how to order a coffee.",
+    ),
+  },
+  {
+    id: "zh-travel",
+    unitId: "zh-unit-1",
+    order: 4,
+    title: "Travel & Directions",
+    description: "Ask where places are and follow directions.",
+    imageUrl: lessonImages.travel,
+    xpReward: 15,
+    goals: ["Ask where a place is", "Understand left and right"],
+    vocabulary: [
+      { id: "che-zhan", term: "车站", translation: "station", pronunciation: "chē zhàn" },
+      { id: "zuo", term: "左边", translation: "left", pronunciation: "zuǒ bian" },
+      { id: "you", term: "右边", translation: "right", pronunciation: "yòu bian" },
+    ],
+    phrases: [
+      { id: "zai-nali", text: "车站在哪里？", translation: "Where is the station?", pronunciation: "chē zhàn zài nǎ lǐ" },
+      { id: "yi-zhi-zou", text: "一直走。", translation: "Go straight ahead.", pronunciation: "yì zhí zǒu" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "What does “右边” mean?",
+        options: ["left", "right", "station"],
+        correctAnswer: "right",
+      },
+      { id: "talk", type: "conversation", title: "Find your way", scenario: "You are lost and ask a local for help." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "Chinese",
+      "directions: chē zhàn, zuǒ bian, yòu bian, ...zài nǎ lǐ?, yì zhí zǒu.",
+      "Hi! Today we'll find our way around Beijing. First word: chē zhàn.",
+    ),
+  },
+  {
+    id: "zh-shopping",
+    unitId: "zh-unit-1",
+    order: 5,
+    title: "Shopping",
+    description: "Ask for prices and buy something.",
+    imageUrl: lessonImages.shopping,
+    xpReward: 15,
+    goals: ["Ask how much something costs", "Say what you want to buy"],
+    vocabulary: [
+      { id: "shang-dian", term: "商店", translation: "shop", pronunciation: "shāng diàn" },
+      { id: "yi-fu", term: "衣服", translation: "clothes", pronunciation: "yī fu" },
+      { id: "qian", term: "钱", translation: "money", pronunciation: "qián" },
+    ],
+    phrases: [
+      { id: "duo-shao", text: "这个多少钱？", translation: "How much is this?", pronunciation: "zhè ge duō shao qián" },
+      { id: "wo-mai", text: "我买这个。", translation: "I'll buy this one.", pronunciation: "wǒ mǎi zhè ge" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "How do you ask the price?",
+        options: ["这个多少钱？", "车站在哪里？", "我买这个。"],
+        correctAnswer: "这个多少钱？",
+      },
+      { id: "talk", type: "conversation", title: "At the shop", scenario: "You are a shopper and the teacher is the shop assistant." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "Chinese",
+      "shopping: shāng diàn, yī fu, qián, zhè ge duō shao qián?, wǒ mǎi zhè ge.",
+      "Hi! Let's go shopping in Chinese. First word: shāng diàn.",
+    ),
+  },
+  {
+    id: "zh-family",
+    unitId: "zh-unit-1",
+    order: 6,
+    title: "Family & Friends",
+    description: "Talk about the people in your life.",
+    imageUrl: lessonImages.family,
+    xpReward: 15,
+    goals: ["Name family members", "Introduce a friend"],
+    vocabulary: [
+      { id: "ma-ma", term: "妈妈", translation: "mom", pronunciation: "mā ma" },
+      { id: "ba-ba", term: "爸爸", translation: "dad", pronunciation: "bà ba" },
+      { id: "peng-you", term: "朋友", translation: "friend", pronunciation: "péng you" },
+    ],
+    phrases: [
+      { id: "zhe-shi", text: "这是我妈妈。", translation: "This is my mom.", pronunciation: "zhè shì wǒ mā ma" },
+      { id: "ge-ge", text: "我有一个哥哥。", translation: "I have an older brother.", pronunciation: "wǒ yǒu yí ge gē ge" },
+    ],
+    activities: [
+      { id: "words", type: "vocabulary", title: "New words" },
+      { id: "speak", type: "phrases", title: "Say it out loud" },
+      {
+        id: "quiz",
+        type: "multiple-choice",
+        title: "Quick check",
+        question: "What does “朋友” mean?",
+        options: ["mom", "dad", "friend"],
+        correctAnswer: "friend",
+      },
+      { id: "talk", type: "conversation", title: "Meet my family", scenario: "You show a friend a family photo." },
+    ],
+    aiTeacherPrompt: createTeacherPrompt(
+      "Chinese",
+      "family and friends: mā ma, bà ba, péng you, zhè shì..., wǒ yǒu...",
+      "Hello again! Let's talk about your family in Chinese.",
+    ),
+  },
 ];
 
 export function getLessonsByUnit(unitId: string) {
   return lessons
     .filter((lesson) => lesson.unitId === unitId)
     .sort((a, b) => a.order - b.order);
+}
+
+/** Every lesson of a language, in the order they are taught. */
+export function getLessonsByLanguage(languageId: LanguageId) {
+  return getUnitsByLanguage(languageId).flatMap((unit) =>
+    getLessonsByUnit(unit.id),
+  );
 }
 
 export function getLessonById(id: string) {

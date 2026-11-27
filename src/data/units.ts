@@ -1,6 +1,6 @@
 import type { LanguageId, Unit } from "@/types/learning";
 
-// Sample content: Spanish, French and Japanese.
+// Sample content for every language.
 export const units: Unit[] = [
   {
     id: "es-unit-1",
@@ -32,6 +32,30 @@ export const units: Unit[] = [
     order: 1,
     title: "First Steps",
     description: "Say hello and order at a café.",
+    level: "A1",
+  },
+  {
+    id: "ko-unit-1",
+    languageId: "ko",
+    order: 1,
+    title: "First Steps",
+    description: "Everyday basics, from hello to family.",
+    level: "A1",
+  },
+  {
+    id: "de-unit-1",
+    languageId: "de",
+    order: 1,
+    title: "First Steps",
+    description: "Everyday basics, from hello to family.",
+    level: "A1",
+  },
+  {
+    id: "zh-unit-1",
+    languageId: "zh",
+    order: 1,
+    title: "First Steps",
+    description: "Everyday basics, from hello to family.",
     level: "A1",
   },
 ];
