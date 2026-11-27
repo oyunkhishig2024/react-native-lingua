@@ -7,6 +7,8 @@ export type Language = {
   id: LanguageId;
   name: string;
   nativeName: string;
+  /** "Hello" in this language, shown on the home screen. */
+  greeting: string;
   flagUrl: string;
   /** Display text, e.g. "28.4M learners". */
   learners: string;
@@ -80,4 +82,14 @@ export type Lesson = {
   phrases: Phrase[];
   activities: Activity[];
   aiTeacherPrompt: AITeacherPrompt;
+};
+
+/** Mock progress until XP and completed lessons are tracked for real. */
+export type LearningProgress = {
+  streakDays: number;
+  dailyGoalXp: number;
+  /** The lesson the learner is on, for each language that has content. */
+  currentLessonIds: Partial<Record<LanguageId, string>>;
+  /** Lessons finished today. Their `xpReward` counts toward the daily goal. */
+  completedLessonIds: string[];
 };

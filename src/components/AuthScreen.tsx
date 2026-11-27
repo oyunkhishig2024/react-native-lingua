@@ -1,5 +1,4 @@
 import { useSignIn, useSignUp, useSSO } from "@clerk/expo";
-import { Image } from "expo-image";
 import { Link, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
@@ -15,10 +14,14 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { Image } from "@/components/Image";
 import { VerificationModal } from "@/components/VerificationModal";
 import { images } from "@/constants/images";
 import { showAuthError, showAuthMessage } from "@/lib/clerk";
 import { colors, fontFamily } from "@/theme";
+
+// Clerk checks this too: keep its "minimum length" setting at the same number
+const MIN_PASSWORD_LENGTH = 8;
 
 const content = {
   "sign-up": {
@@ -85,8 +88,10 @@ export function AuthScreen({ mode }: AuthScreenProps) {
 
     if (isBusy) return;
     if (!emailAddress) return showAuthMessage("Enter your email address.");
-    if (mode === "sign-up" && !password) {
-      return showAuthMessage("Enter a password.");
+    if (mode === "sign-up" && password.length < MIN_PASSWORD_LENGTH) {
+      return showAuthMessage(
+        `Password must be at least ${MIN_PASSWORD_LENGTH} characters.`,
+      );
     }
 
     setIsBusy(true);
@@ -172,7 +177,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
               onPress={goBack}
               className="h-10 w-10 justify-center"
             >
-              <Image source={images.chevronLeft} style={styles.icon} />
+              <Image source={images.chevronLeft} className="h-[24px] w-[24px]" />
             </Pressable>
 
             <Text className="auth__title mt-3">{copy.title}</Text>
@@ -184,25 +189,24 @@ export function AuthScreen({ mode }: AuthScreenProps) {
                 <RNImage
                   source={images.mascotAuth}
                   // Mirrored so the fox waves on the left, as in the design
-                  className="h-[200px]! w-[200px]!"
-                  style={styles.mirrored}
+                  className="h-[200px]! w-[200px]! -scale-x-100"
                   resizeMode="contain"
                 />
               </View>
               <Image
                 source={images.sparkle}
                 tintColor="#F5A623"
-                style={styles.sparkleOrange}
+                className="absolute left-[28px] top-[26px] h-[16px] w-[14px]"
               />
               <Image
                 source={images.sparkle}
                 tintColor="#6FA8FF"
-                style={styles.sparkleBlue}
+                className="absolute right-[32px] top-[33px] h-[15px] w-[13px]"
               />
               <Image
                 source={images.sparkle}
                 tintColor="#FFD43B"
-                style={styles.sparkleYellow}
+                className="absolute right-[44px] top-[65px] h-[15px] w-[13px]"
               />
             </View>
 
@@ -251,7 +255,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
                 >
                   <Image
                     source={showPassword ? images.eyeOff : images.eye}
-                    style={styles.icon}
+                    className="h-[24px] w-[24px]"
                   />
                 </Pressable>
               </View>
@@ -260,8 +264,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
             <Pressable
               accessibilityRole="button"
               onPress={submit}
-              className="auth__button mt-4"
-              style={styles.gradient}
+              className="auth__button auth__button--gradient mt-4"
             >
               <Text className="auth__button-text">{copy.button}</Text>
             </Pressable>
@@ -281,7 +284,7 @@ export function AuthScreen({ mode }: AuthScreenProps) {
                   onPress={() => continueWith(provider.strategy)}
                   className="auth__social"
                 >
-                  <Image source={provider.icon} style={styles.icon} />
+                  <Image source={provider.icon} className="h-[24px] w-[24px]" />
                   <Text className="auth__social-text">
                     Continue with {provider.name}
                   </Text>
@@ -319,37 +322,11 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.background },
   flex: { flex: 1 },
   scrollContent: { flexGrow: 1 },
-  icon: { width: 24, height: 24 },
-  mirrored: { transform: [{ scaleX: -1 }] },
-  sparkleOrange: {
-    position: "absolute",
-    left: 28,
-    top: 26,
-    width: 14,
-    height: 16,
-  },
-  sparkleBlue: {
-    position: "absolute",
-    right: 32,
-    top: 33,
-    width: 13,
-    height: 15,
-  },
-  sparkleYellow: {
-    position: "absolute",
-    right: 44,
-    top: 65,
-    width: 13,
-    height: 15,
-  },
   input: {
     height: 28,
     padding: 0,
     fontFamily: fontFamily.medium,
     fontSize: 16,
     color: colors.textPrimary,
-  },
-  gradient: {
-    backgroundImage: "linear-gradient(to right, #5B3BF6, #7B5CF5)",
   },
 });
