@@ -1,0 +1,264 @@
+import { Image } from "expo-image";
+import { Link, router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import { useState } from "react";
+import {
+  KeyboardAvoidingView,
+  Pressable,
+  Image as RNImage,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+import { VerificationModal } from "@/components/VerificationModal";
+import { images } from "@/constants/images";
+import { colors, fontFamily } from "@/theme";
+
+const content = {
+  "sign-up": {
+    title: "Create your account",
+    subtitle: "Start your language journey today ✨",
+    button: "Sign Up",
+    footer: "Already have an account?",
+    footerLink: "Log in",
+    footerHref: "/sign-in",
+  },
+  "sign-in": {
+    title: "Welcome back",
+    subtitle: "Continue your language journey ✨",
+    button: "Sign In",
+    footer: "Don't have an account?",
+    footerLink: "Sign up",
+    footerHref: "/sign-up",
+  },
+} as const;
+
+const socialProviders = [
+  { name: "Google", icon: images.google },
+  { name: "Facebook", icon: images.facebook },
+  { name: "Apple", icon: images.apple },
+];
+
+type AuthScreenProps = {
+  mode: keyof typeof content;
+};
+
+// UI only: authentication is not connected yet.
+export function AuthScreen({ mode }: AuthScreenProps) {
+  const copy = content[mode];
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  const goBack = () => {
+    if (router.canGoBack()) {
+      router.back();
+    } else {
+      router.replace("/onboarding");
+    }
+  };
+
+  const finishVerification = () => {
+    setIsVerifying(false);
+    router.dismissTo("/");
+  };
+
+  return (
+    <SafeAreaView style={styles.screen}>
+      <StatusBar style="dark" />
+      <KeyboardAvoidingView behavior="padding" style={styles.flex}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View className="w-full max-w-[480px] flex-1 self-center px-[26px] pb-4">
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Go back"
+              hitSlop={12}
+              onPress={goBack}
+              className="h-10 w-10 justify-center"
+            >
+              <Image source={images.chevronLeft} style={styles.icon} />
+            </Pressable>
+
+            <Text className="auth__title mt-3">{copy.title}</Text>
+            <Text className="auth__subtitle mt-1.5">{copy.subtitle}</Text>
+
+            {/* Mascot + sparkles */}
+            <View className="mt-2 h-[132px] w-[280px] self-center">
+              <View className="absolute -top-[34px] left-10">
+                <RNImage
+                  source={images.mascotAuth}
+                  // Mirrored so the fox waves on the left, as in the design
+                  className="h-[200px]! w-[200px]!"
+                  style={styles.mirrored}
+                  resizeMode="contain"
+                />
+              </View>
+              <Image
+                source={images.sparkle}
+                tintColor="#F5A623"
+                style={styles.sparkleOrange}
+              />
+              <Image
+                source={images.sparkle}
+                tintColor="#6FA8FF"
+                style={styles.sparkleBlue}
+              />
+              <Image
+                source={images.sparkle}
+                tintColor="#FFD43B"
+                style={styles.sparkleYellow}
+              />
+            </View>
+
+            <View className="auth__field">
+              <View className="flex-1">
+                <Text className="auth__field-label">Email</Text>
+                <TextInput
+                  accessibilityLabel="Email"
+                  value={email}
+                  onChangeText={setEmail}
+                  placeholder="alex@gmail.com"
+                  placeholderTextColor="#A3A9B8"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoComplete="email"
+                  autoCorrect={false}
+                  style={styles.input}
+                />
+              </View>
+            </View>
+
+            {mode === "sign-up" && (
+              <View className="auth__field mt-3">
+                <View className="flex-1">
+                  <Text className="auth__field-label">Password</Text>
+                  <TextInput
+                    accessibilityLabel="Password"
+                    value={password}
+                    onChangeText={setPassword}
+                    placeholder="•••••••••"
+                    placeholderTextColor="#A3A9B8"
+                    secureTextEntry={!showPassword}
+                    autoCapitalize="none"
+                    autoComplete="new-password"
+                    autoCorrect={false}
+                    style={styles.input}
+                  />
+                </View>
+                <Pressable
+                  accessibilityRole="button"
+                  accessibilityLabel={
+                    showPassword ? "Hide password" : "Show password"
+                  }
+                  hitSlop={12}
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Image
+                    source={showPassword ? images.eyeOff : images.eye}
+                    style={styles.icon}
+                  />
+                </Pressable>
+              </View>
+            )}
+
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => setIsVerifying(true)}
+              className="auth__button mt-4"
+              style={styles.gradient}
+            >
+              <Text className="auth__button-text">{copy.button}</Text>
+            </Pressable>
+
+            {/* Divider */}
+            <View className="my-5 flex-row items-center gap-4">
+              <View className="h-px flex-1 bg-border" />
+              <Text className="auth__subtitle">or continue with</Text>
+              <View className="h-px flex-1 bg-border" />
+            </View>
+
+            <View className="gap-2">
+              {socialProviders.map((provider) => (
+                <Pressable
+                  key={provider.name}
+                  accessibilityRole="button"
+                  className="auth__social"
+                >
+                  <Image source={provider.icon} style={styles.icon} />
+                  <Text className="auth__social-text">
+                    Continue with {provider.name}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+
+            {/* Switch between sign up and sign in */}
+            <View className="mt-auto flex-row flex-wrap items-center justify-center gap-1 pt-5">
+              <Text className="auth__subtitle">{copy.footer}</Text>
+              <Link href={copy.footerHref} replace className="auth__link">
+                {copy.footerLink}
+              </Link>
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+
+      {/* Mounted only while open, so the code resets every time */}
+      {isVerifying && (
+        <VerificationModal
+          email={email.trim()}
+          onClose={() => setIsVerifying(false)}
+          onComplete={finishVerification}
+        />
+      )}
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: colors.background },
+  flex: { flex: 1 },
+  scrollContent: { flexGrow: 1 },
+  icon: { width: 24, height: 24 },
+  mirrored: { transform: [{ scaleX: -1 }] },
+  sparkleOrange: {
+    position: "absolute",
+    left: 28,
+    top: 26,
+    width: 14,
+    height: 16,
+  },
+  sparkleBlue: {
+    position: "absolute",
+    right: 32,
+    top: 33,
+    width: 13,
+    height: 15,
+  },
+  sparkleYellow: {
+    position: "absolute",
+    right: 44,
+    top: 65,
+    width: 13,
+    height: 15,
+  },
+  input: {
+    height: 28,
+    padding: 0,
+    fontFamily: fontFamily.medium,
+    fontSize: 16,
+    color: colors.textPrimary,
+  },
+  gradient: {
+    backgroundImage: "linear-gradient(to right, #5B3BF6, #7B5CF5)",
+  },
+});
