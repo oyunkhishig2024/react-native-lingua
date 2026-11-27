@@ -194,3 +194,83 @@
   border-radius: 12px;
   background-color: var(--color-surface);
 }
+
+/* Language selection screen (BEM) */
+@utility language__title {
+  font-family: var(--font-montserrat-semibold);
+  font-size: 18px;
+  line-height: 24px;
+  color: var(--color-text-primary);
+}
+
+@utility language__search {
+  flex-direction: row;
+  align-items: center;
+  height: 50px;
+  padding-left: 18px;
+  padding-right: 18px;
+  border-width: 1px;
+  border-color: #eceef3;
+  border-radius: 22px;
+  background-color: #fafafc;
+}
+
+@utility language__section {
+  font-family: var(--font-montserrat-semibold);
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--color-text-primary);
+}
+
+@utility language__card {
+  flex-direction: row;
+  align-items: center;
+  height: 82px;
+  padding-left: 15px;
+  padding-right: 18px;
+  border-width: 1.5px;
+  border-radius: 18px;
+}
+
+@utility language__card--idle {
+  border-color: #f4f5f8;
+  background-color: var(--color-background);
+}
+
+@utility language__card--selected {
+  border-color: var(--color-lingua-purple);
+  background-color: #f9f9fe;
+}
+
+@utility language__flag {
+  width: 36px;
+  height: 36px;
+  overflow: hidden;
+  border-width: 1px;
+  border-color: #eceef3;
+  border-radius: 18px;
+}
+
+@utility language__name {
+  font-family: var(--font-montserrat-semibold);
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--color-text-primary);
+}
+
+@utility language__learners {
+  margin-top: 4px;
+  font-family: var(--font-montserrat);
+  font-size: 13px;
+  line-height: 20px;
+  color: #5b6478;
+}
+
+@utility language__check {
+  width: 26px;
+  height: 26px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  background-color: var(--color-lingua-deep-purple);
+}

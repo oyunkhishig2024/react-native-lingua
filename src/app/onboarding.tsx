@@ -26,7 +26,7 @@ export default function Onboarding() {
             <Text className="text-lingua-deep-purple">шифү багш</Text>.
           </Text>
           <Text className="onboarding__subtitle mt-3">
-            Харилцан ярилцдаг жинкен ми шифү, хаа ч байсан цуг гэж мэдээрэй!
+            Харилцан ярилцдаг жинкен ми шифү!
           </Text>
         </View>
 
@@ -50,7 +50,7 @@ export default function Onboarding() {
             </View>
 
             {/* ¡Hola! */}
-            <View className="absolute right-22 top-0 rotate-6">
+            <View className="absolute right-2 top-0 rotate-6">
               <View className="rounded-2xl bg-[#F1F2FE] px-8 py-3.5">
                 <Text className="onboarding__bubble text-[#3B2FD9]">
                   ¡Hola!
